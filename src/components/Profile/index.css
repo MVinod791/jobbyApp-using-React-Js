@@ -1,0 +1,30 @@
+.profile-section {
+  background-color: #cbd5e1;
+  border-radius: 16px;
+  height: 200px;
+  width: 250px;
+  padding-top: 24px;
+  padding-left: 16px;
+  padding-bottom: 24px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.profile-image {
+  width: 38px;
+  height: 38px;
+}
+.profile-heading {
+  color: #6366f1;
+  font-family: 'Roboto';
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+.short-bio {
+  color: #475569;
+  font-size: 14px;
+  font-family: 'Roboto';
+  text-align: left;
+  line-height: 24px;
+}
