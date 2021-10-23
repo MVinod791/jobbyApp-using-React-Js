@@ -217,3 +217,17 @@
     margin-left: 48px;
   }
 }
+.input {
+  width: 14px;
+  height: 14px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.label-name {
+  color: #ffffff;
+  font-size: 14px;
+  font-family: 'Roboto';
+  margin-left: 10px;
+}

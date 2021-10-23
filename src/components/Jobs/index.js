@@ -3,7 +3,6 @@ import Loader from 'react-loader-spinner'
 import {BsSearch} from 'react-icons/bs'
 import Cookies from 'js-cookie'
 import JobCard from '../JobCard'
-import FilterGroup from '../FilterGroup'
 import Header from '../Header'
 import Profile from '../Profile'
 import './index.css'
@@ -60,6 +59,7 @@ class Jobs extends Component {
     searchInput: '',
     activeEmploymentId: '',
     activeSalaryId: '',
+    employmentTypeListId: [],
   }
 
   componentDidMount() {
@@ -103,13 +103,11 @@ class Jobs extends Component {
 
   onChangeSearchInput = event => {
     const {value} = event.target
-    this.setState({searchInput: value}, this.getJobs)
+    this.setState({searchInput: value})
   }
 
-  enterSearchInput = searchInput => {
-    if (searchInput.key === 'enter') {
-      this.getJobs()
-    }
+  onEnterSearchInput = () => {
+    this.getJobs()
   }
 
   renderSearchInputFiled = () => {
@@ -127,7 +125,7 @@ class Jobs extends Component {
           type="button"
           testid="searchButton"
           className="search-icon-btn"
-          onKeyDown={this.enterSearchInput}
+          onClick={this.onEnterSearchInput}
         >
           <BsSearch className="search-icon" />
         </button>
@@ -152,6 +150,10 @@ class Jobs extends Component {
     )
   }
 
+  onChangeEmployees = id => {
+    this.setState({activeEmploymentId: id}, this.getJobs())
+  }
+
   renderJobsList = () => {
     const {jobsList} = this.state
     const showJobsList = jobsList.length > 0
@@ -162,7 +164,11 @@ class Jobs extends Component {
         {showJobsList ? (
           <ul className="jobs-list">
             {jobsList.map(eachJob => (
-              <JobCard jobData={eachJob} key={eachJob.id} />
+              <JobCard
+                jobData={eachJob}
+                key={eachJob.id}
+                onChangeEmployees={this.onChangeEmployees}
+              />
             ))}
           </ul>
         ) : (
@@ -228,15 +234,21 @@ class Jobs extends Component {
     }
   }
 
-  onChangeEmployTypes = id => {
-    this.setState({activeEmploymentId: id}, this.getJobs)
+  onClickEmployTypes = () => {
+    this.getJobs()
   }
 
   renderEmploymentTypesList = () => {
     const {activeEmploymentId} = this.state
     return employmentTypesList.map(empType => (
       <li key={empType.employmentTypeId} className="items">
-        <input type="checkbox" className="input" id="emp" />
+        <input
+          type="checkbox"
+          value={activeEmploymentId}
+          className="input"
+          id="emp"
+          onClick={this.onClickEmployTypes}
+        />
         <label htmlFor="emp" className="label-name" value="label">
           {empType.label}
         </label>
@@ -244,10 +256,7 @@ class Jobs extends Component {
     ))
   }
 
-  conCLickSalaryRangeList = event => {
-    const {jobsList, activeSalaryId} = this.state
-    const {value} = event.target
-  }
+  onCLickSalaryRangeList = () => {}
 
   renderSalaryRangesList = () => {
     const {activeSalaryId} = this.state
@@ -260,7 +269,6 @@ class Jobs extends Component {
           id="input-radio"
           value={activeSalaryId}
           onClick={this.onCLickSalaryRangeList}
-          onChange={this.onChangeSalary}
         />
         <label value="label" htmlFor="input-radio" className="label-name">
           {salary.label}
@@ -270,11 +278,8 @@ class Jobs extends Component {
   }
 
   render() {
-    const {activeEmploymentId, activeSalaryId, jobsList} = this.state
-    const filteredSalary = jobsList.filter(
-      eachEmp => eachEmp.pkgPerAnnum === activeSalaryId,
-    )
-    console.log(filteredSalary)
+    const {jobsList} = this.state
+
     const showJobsList = jobsList.length > 0
     return (
       <>

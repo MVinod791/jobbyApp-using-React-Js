@@ -16,11 +16,9 @@ const JobCard = props => {
     id,
   } = jobData
 
-  const onClickSpecificJob = () => {}
-
   return (
     <Link to={`/jobs/${id}`} className="link-item">
-      <li className="job-item" onClick={onClickSpecificJob}>
+      <li className="job-item">
         <div className="title-logo-container">
           <img
             src={companyLogoUrl}

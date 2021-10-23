@@ -100,16 +100,12 @@ class AllJobsSection extends Component {
     }
   }
 
-  onChangeSearchInput = event => {
-    const {value} = event.target
-    this.enterSearchInput(value)
-    this.setState({searchInput: value})
+  enterSearchInput = () => {
+    this.getProducts()
   }
 
-  enterSearchInput = event => {
-    if (event.key === 'enter') {
-      this.getJobs()
-    }
+  changeSearchInput = searchInput => {
+    this.setState({searchInput})
   }
 
   renderSearchInputFiled = () => {
