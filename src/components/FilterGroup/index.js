@@ -8,7 +8,7 @@ const FilterGroup = props => {
   const renderEmploymentTypesList = () => {
     const {employmentTypesList} = props
     return employmentTypesList.map(empType => {
-      const {changeEmployTypes, activeEmploymentId} = props
+      const {changeEmployTypes} = props
       const onClickEmploymentTypeList = () => {
         changeEmployTypes(empType.employmentTypeId)
       }

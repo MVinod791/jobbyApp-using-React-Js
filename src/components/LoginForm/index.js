@@ -25,9 +25,8 @@ class LoginForm extends Component {
     history.replace('/')
   }
 
-  onSubmitFailure = errorMsg => {
-    console.log(errorMsg)
-    this.setState({showErrorMsg: true, errorMsg})
+  onSubmitFailure = error => {
+    this.setState({showErrorMsg: true, errorMsg: error})
   }
 
   onSubmitForm = async event => {
@@ -40,7 +39,7 @@ class LoginForm extends Component {
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
-    console.log(response)
+
     const data = await response.json()
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
@@ -60,6 +59,7 @@ class LoginForm extends Component {
           value={password}
           type="password"
           id="password"
+          placeholder="Password"
           className="password-input-field"
           onChange={this.onChangePassword}
         />

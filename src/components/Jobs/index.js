@@ -59,7 +59,8 @@ class Jobs extends Component {
     searchInput: '',
     activeEmploymentId: '',
     activeSalaryId: '',
-    employmentTypeListId: [],
+    isChecked: false,
+    employmentTypeListId: [], // Maintain the array in the state object which contains the employmentTypeId of the checked checkbox input elements
   }
 
   componentDidMount() {
@@ -69,7 +70,17 @@ class Jobs extends Component {
   getJobs = async () => {
     this.setState({apiStatus: apiConstantStatus.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-    const {activeEmploymentId, activeSalaryId, searchInput} = this.state
+
+    const {
+      employmentTypeListId,
+      activeSalaryId,
+      searchInput,
+      activeEmploymentId,
+    } = this.state
+
+    // updated
+    const employmentType = employmentTypeListId.join(',')
+
     const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${activeEmploymentId}&minimum_package=${activeSalaryId}&search=${searchInput}`
     const options = {
       headers: {
@@ -150,10 +161,6 @@ class Jobs extends Component {
     )
   }
 
-  onChangeEmployees = id => {
-    this.setState({activeEmploymentId: id}, this.getJobs())
-  }
-
   renderJobsList = () => {
     const {jobsList} = this.state
     const showJobsList = jobsList.length > 0
@@ -174,19 +181,14 @@ class Jobs extends Component {
         ) : (
           <div className="no-jobs-found-view">
             <img
-              src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
-              alt="failure view"
+              src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png "
+              alt="no jobs"
               className="job-failure-img"
             />
-            <h1 className="job-failure-heading-text">
-              Oops! Something Went Wrong
-            </h1>
+            <h1 className="job-failure-heading-text">No Jobs Found</h1>
             <p className="job-failure-description-text">
-              We cannot seem to find the page you are looking for
+              We could not find any jobs. Try other filters
             </p>
-            <button type="button" className="retry-button">
-              Retry
-            </button>
           </div>
         )}
       </div>
@@ -234,12 +236,12 @@ class Jobs extends Component {
     }
   }
 
-  onClickEmployTypes = () => {
-    this.getJobs()
-  }
+  onClickEmployTypesIds = () => {}
 
   renderEmploymentTypesList = () => {
     const {activeEmploymentId} = this.state
+    console.log(activeEmploymentId)
+
     return employmentTypesList.map(empType => (
       <li key={empType.employmentTypeId} className="items">
         <input
@@ -247,7 +249,7 @@ class Jobs extends Component {
           value={activeEmploymentId}
           className="input"
           id="emp"
-          onClick={this.onClickEmployTypes}
+          onClick={this.onClickEmployTypesIds}
         />
         <label htmlFor="emp" className="label-name" value="label">
           {empType.label}
@@ -266,11 +268,11 @@ class Jobs extends Component {
           type="radio"
           className="input"
           name="salary"
-          id="input-radio"
+          id="salaryId"
           value={activeSalaryId}
           onClick={this.onCLickSalaryRangeList}
         />
-        <label value="label" htmlFor="input-radio" className="label-name">
+        <label value="label" htmlFor="salaryId" className="label-name">
           {salary.label}
         </label>
       </li>
