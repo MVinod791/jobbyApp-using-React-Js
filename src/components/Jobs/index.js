@@ -71,17 +71,12 @@ class Jobs extends Component {
     this.setState({apiStatus: apiConstantStatus.inProgress})
     const jwtToken = Cookies.get('jwt_token')
 
-    const {
-      employmentTypeListId,
-      activeSalaryId,
-      searchInput,
-      activeEmploymentId,
-    } = this.state
+    const {employmentTypeListId, activeSalaryId, searchInput} = this.state
 
     // updated
     const employmentType = employmentTypeListId.join(',')
 
-    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${activeEmploymentId}&minimum_package=${activeSalaryId}&search=${searchInput}`
+    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employmentType}&minimum_package=${activeSalaryId}&search=${searchInput}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -236,20 +231,37 @@ class Jobs extends Component {
     }
   }
 
-  onClickEmployTypesIds = () => {}
+  onChangeEmployTypesIds = event => {
+    console.log(event.target.checked)
+    const checkedValue = event.target.value
+    // add values
+    if (event.target.checked) {
+      this.setState(prevState => ({
+        ...prevState,
+        employmentTypeListId: [...prevState.employmentTypeListId, checkedValue],
+      }))
+    } else {
+      // remove item from array
+      const {employmentTypeListId} = this.state
+      this.setState({
+        employmentTypeListId: employmentTypeListId.filter(
+          eachItem => eachItem.employmentTypeId !== checkedValue,
+        ),
+      })
+    }
+  }
 
   renderEmploymentTypesList = () => {
-    const {activeEmploymentId} = this.state
-    console.log(activeEmploymentId)
-
+    const {activeEmploymentId, employmentTypeListId} = this.state
+    console.log(employmentTypeListId)
     return employmentTypesList.map(empType => (
-      <li key={empType.employmentTypeId} className="items">
+      <li key={empType.employmentTypeId} className="emp-type-item">
         <input
           type="checkbox"
-          value={activeEmploymentId}
-          className="input"
+          className="checkbox-input"
           id="emp"
-          onClick={this.onClickEmployTypesIds}
+          value={activeEmploymentId}
+          onChange={this.onChangeEmployTypesIds}
         />
         <label htmlFor="emp" className="label-name" value="label">
           {empType.label}
@@ -263,7 +275,7 @@ class Jobs extends Component {
   renderSalaryRangesList = () => {
     const {activeSalaryId} = this.state
     return salaryRangesList.map(salary => (
-      <li className="items" key={salary.salaryRangeId}>
+      <li className="salary-type-item" key={salary.salaryRangeId}>
         <input
           type="radio"
           className="input"
