@@ -4,7 +4,6 @@ import {FaExternalLinkAlt} from 'react-icons/fa'
 import {MdLocationOn} from 'react-icons/md'
 import {BsBriefcaseFill, BsFillStarFill} from 'react-icons/bs'
 import Cookies from 'js-cookie'
-import Skills from '../Skills'
 import SimilarJobItem from '../SimilarJobItem'
 import Header from '../Header'
 
@@ -20,7 +19,6 @@ const apiConstantsStatus = {
 class JobItemDetails extends Component {
   state = {
     jobsItemData: {},
-    similarJobData: [],
     apiStatus: apiConstantsStatus.initial,
   }
 
@@ -60,21 +58,20 @@ class JobItemDetails extends Component {
         skills: data.job_details.skills.map(eachSkill => ({
           name: eachSkill.name,
           imageUrl: eachSkill.image_url,
-          id: eachSkill.id,
+        })),
+        similarData: data.similar_jobs.map(eachData => ({
+          companyLogoUrl: eachData.company_logo_url,
+          employmentType: eachData.employment_type,
+          id: eachData.id,
+          jobDescription: eachData.job_description,
+          location: eachData.location,
+          title: eachData.title,
+          rating: eachData.rating,
         })),
       }
-      const updatedSimilarData = data.similar_jobs.map(eachData => ({
-        companyLogoUrl: eachData.company_logo_url,
-        employmentType: eachData.employment_type,
-        id: eachData.id,
-        jobDescription: eachData.job_description,
-        location: eachData.location,
-        title: eachData.title,
-        rating: eachData.rating,
-      }))
+
       this.setState({
         jobsItemData: updateJobsData,
-        similarJobData: updatedSimilarData,
         apiStatus: apiConstantsStatus.success,
       })
     } else {
@@ -83,7 +80,7 @@ class JobItemDetails extends Component {
   }
 
   renderJobItemView = () => {
-    const {jobsItemData, similarJobData} = this.state
+    const {jobsItemData} = this.state
     const {
       companyLogoUrl,
       companyWebSiteUrl,
@@ -91,7 +88,7 @@ class JobItemDetails extends Component {
       jobDescription,
       location,
       pkgPerAnnum,
-      skills,
+
       rating,
       title,
     } = jobsItemData
@@ -125,27 +122,36 @@ class JobItemDetails extends Component {
           <hr className="line" />
           <div className="website-container">
             <h1 className="description-heading">Description</h1>
-            <a
-              href={companyWebSiteUrl}
-              rel="noopener noreferrer"
-              className="website-url"
-              target="_blank"
-            >
-              Visit <FaExternalLinkAlt />
-            </a>
+            <p>
+              <a
+                href={companyWebSiteUrl}
+                rel="noopener noreferrer"
+                className="website-url"
+                target="_blank"
+              >
+                Visit <FaExternalLinkAlt />
+              </a>
+            </p>
           </div>
           <p className="job-description">{jobDescription}</p>
           <h1 className="skill-heading">Skills</h1>
           <ul className="skill-list-container">
-            {skills.map(eachSkill => (
-              <Skills skillDetails={eachSkill} key={eachSkill.id} />
+            {jobsItemData.skills.map(eachSkill => (
+              <li className="skill-item">
+                <img
+                  src={eachSkill.imageUrl}
+                  alt={eachSkill.name}
+                  className="skill-image"
+                />
+                <p className="skill-name">{eachSkill.name}</p>
+              </li>
             ))}
           </ul>
           {this.renderLifeAtCompany()}
         </div>
         <h1 className="similar-job-heading">Similar Jobs</h1>
         <ul className="similar-job-list">
-          {similarJobData.map(eachSimilarData => (
+          {jobsItemData.similarData.map(eachSimilarData => (
             <SimilarJobItem
               similarJobDetails={eachSimilarData}
               key={eachSimilarData.id}
@@ -170,6 +176,10 @@ class JobItemDetails extends Component {
     )
   }
 
+  onClickRetry = () => {
+    this.getJobDetails()
+  }
+
   renderFailureView = () => (
     <div className="job-failure-view-container">
       <img
@@ -181,7 +191,11 @@ class JobItemDetails extends Component {
       <p className="job-failure-description-text">
         We cannot seem to find the page you are looking for
       </p>
-      <button type="button" className="retry-button">
+      <button
+        type="button"
+        className="retry-button"
+        onClick={this.onClickRetry}
+      >
         Retry
       </button>
     </div>

@@ -59,8 +59,7 @@ class Jobs extends Component {
     searchInput: '',
     activeEmploymentId: '',
     activeSalaryId: '',
-    isChecked: false,
-    employmentTypeListId: [], // Maintain the array in the state object which contains the employmentTypeId of the checked checkbox input elements
+    employmentTypeListId: [],
   }
 
   componentDidMount() {
@@ -108,8 +107,7 @@ class Jobs extends Component {
   }
 
   onChangeSearchInput = event => {
-    const {value} = event.target
-    this.setState({searchInput: value})
+    this.setState({searchInput: event.target.value})
   }
 
   onEnterSearchInput = () => {
@@ -196,6 +194,10 @@ class Jobs extends Component {
     </div>
   )
 
+  onClickRetry = () => {
+    this.getJobs()
+  }
+
   renderFailureView = () => (
     <div className="job-failure-view-container">
       <img
@@ -210,7 +212,7 @@ class Jobs extends Component {
       <button
         type="button"
         className="retry-button"
-        onClick={this.renderLoaderView()}
+        onClick={this.onClickRetry}
       >
         Retry
       </button>
@@ -232,45 +234,52 @@ class Jobs extends Component {
   }
 
   onChangeEmployTypesIds = event => {
-    console.log(event.target.checked)
-    const checkedValue = event.target.value
-    // add values
-    if (event.target.checked) {
-      this.setState(prevState => ({
-        ...prevState,
-        employmentTypeListId: [...prevState.employmentTypeListId, checkedValue],
-      }))
+    const {employmentTypeListId} = this.state
+    const isChecked = event.target.checked
+
+    // add values to array
+    if (isChecked) {
+      this.setState(
+        {
+          employmentTypeListId: [...employmentTypeListId, event.target.id],
+        },
+        this.getJobs,
+      )
     } else {
       // remove item from array
-      const {employmentTypeListId} = this.state
-      this.setState({
-        employmentTypeListId: employmentTypeListId.filter(
-          eachItem => eachItem.employmentTypeId !== checkedValue,
-        ),
-      })
+      const filtered = employmentTypeListId.filter(
+        eachItem => eachItem !== event.target.id,
+      )
+      this.setState({employmentTypeListId: filtered}, this.getJobs)
     }
   }
 
   renderEmploymentTypesList = () => {
-    const {activeEmploymentId, employmentTypeListId} = this.state
-    console.log(employmentTypeListId)
+    const {activeEmploymentId} = this.state
+
     return employmentTypesList.map(empType => (
       <li key={empType.employmentTypeId} className="emp-type-item">
         <input
           type="checkbox"
           className="checkbox-input"
-          id="emp"
+          id={empType.employmentTypeId}
           value={activeEmploymentId}
           onChange={this.onChangeEmployTypesIds}
         />
-        <label htmlFor="emp" className="label-name" value="label">
+        <label
+          htmlFor={empType.employmentTypeId}
+          className="label-name"
+          value="label"
+        >
           {empType.label}
         </label>
       </li>
     ))
   }
 
-  onCLickSalaryRangeList = () => {}
+  onCLickSalaryRangeList = event => {
+    this.setState({activeSalaryId: event.target.id}, this.getJobs)
+  }
 
   renderSalaryRangesList = () => {
     const {activeSalaryId} = this.state
@@ -280,11 +289,15 @@ class Jobs extends Component {
           type="radio"
           className="input"
           name="salary"
-          id="salaryId"
+          id={salary.salaryRangeId}
           value={activeSalaryId}
           onClick={this.onCLickSalaryRangeList}
         />
-        <label value="label" htmlFor="salaryId" className="label-name">
+        <label
+          value="label"
+          htmlFor={salary.salaryRangeId}
+          className="label-name"
+        >
           {salary.label}
         </label>
       </li>
@@ -292,9 +305,6 @@ class Jobs extends Component {
   }
 
   render() {
-    const {jobsList} = this.state
-
-    const showJobsList = jobsList.length > 0
     return (
       <>
         <Header />

@@ -242,6 +242,7 @@
 .emp-type-item {
   list-style-type: none;
   margin-top: 10px;
+  cursor: pointer;
 }
 .salary-range-list {
   padding-left: 0px;

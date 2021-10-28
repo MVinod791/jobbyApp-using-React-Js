@@ -1,10 +1,19 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import './index.css'
+
+const apiConstantStatus = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  inProgress: 'IN_PROGRESS',
+}
 
 class Profile extends Component {
   state = {
     profileData: {},
+    apiStatus: apiConstantStatus.initial,
   }
 
   componentDidMount() {
@@ -12,6 +21,7 @@ class Profile extends Component {
   }
 
   getProfile = async () => {
+    this.setState({apiStatus: apiConstantStatus.inProgress})
     const jwtToken = Cookies.get('jwt_token')
     const url = 'https://apis.ccbp.in/profile'
     const options = {
@@ -29,8 +39,17 @@ class Profile extends Component {
         profileImageUrl: data.profile_details.profile_image_url,
         shortBio: data.profile_details.short_bio,
       }
-      this.setState({profileData: updatedData})
+      this.setState({
+        profileData: updatedData,
+        apiStatus: apiConstantStatus.success,
+      })
+    } else {
+      this.setState({apiStatus: apiConstantStatus.failure})
     }
+  }
+
+  onClickRetry = () => {
+    this.getProfile()
   }
 
   renderProfile = () => {
@@ -45,10 +64,42 @@ class Profile extends Component {
     )
   }
 
+  renderLoaderView = () => (
+    <div className="profile-loader-container" testid="loader">
+      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
+    </div>
+  )
+
+  renderFailureView = () => (
+    <div className="profile-failure-view">
+      <button
+        type="button"
+        className="retry-button"
+        onClick={this.onClickRetry}
+      >
+        Retry
+      </button>
+    </div>
+  )
+
+  renderProfileDetails = () => {
+    const {apiStatus} = this.state
+    switch (apiStatus) {
+      case apiConstantStatus.success:
+        return this.renderProfile()
+      case apiConstantStatus.failure:
+        return this.renderFailureView()
+      case apiConstantStatus.inProgress:
+        return this.renderLoaderView()
+      default:
+        return null
+    }
+  }
+
   render() {
     return (
       <div className="profile-container">
-        {this.renderProfile()}
+        {this.renderProfileDetails()}
         <hr className="line" />
       </div>
     )

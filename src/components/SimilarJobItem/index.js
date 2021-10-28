@@ -12,6 +12,7 @@ const SimilarJobItem = props => {
     rating,
     title,
   } = similarJobDetails
+
   return (
     <li className="similar-item">
       <div className="title-logo-container">

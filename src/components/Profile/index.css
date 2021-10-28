@@ -28,3 +28,39 @@
   text-align: left;
   line-height: 24px;
 }
+
+.profile-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+}
+
+@media screen and (min-width: 768px) {
+  .loader-container {
+    width: 30%;
+  }
+}
+.profile-failure-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.retry-button {
+  font-family: 'Roboto';
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffffff;
+  margin-top: 20px;
+  margin-bottom: 2px;
+  background-color: #4f46e5;
+  border-radius: 4px;
+  padding-left: 16px;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
