@@ -107,7 +107,8 @@ class Jobs extends Component {
   }
 
   onChangeSearchInput = event => {
-    this.setState({searchInput: event.target.value})
+    const {value} = event.target
+    this.setState({searchInput: value})
   }
 
   onEnterSearchInput = () => {
