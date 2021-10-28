@@ -57,9 +57,8 @@ class Jobs extends Component {
     apiStatus: apiConstantStatus.initial,
     jobsList: [],
     searchInput: '',
-    activeEmploymentId: '',
-    activeSalaryId: '',
     employmentTypeListId: [],
+    activeSalaryId: '',
   }
 
   componentDidMount() {
@@ -69,9 +68,7 @@ class Jobs extends Component {
   getJobs = async () => {
     this.setState({apiStatus: apiConstantStatus.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-
     const {employmentTypeListId, activeSalaryId, searchInput} = this.state
-
     // updated
     const employmentType = employmentTypeListId.join(',')
 
@@ -255,28 +252,27 @@ class Jobs extends Component {
     }
   }
 
-  renderEmploymentTypesList = () => {
-    const {activeEmploymentId} = this.state
-
-    return employmentTypesList.map(empType => (
-      <li key={empType.employmentTypeId} className="emp-type-item">
-        <input
-          type="checkbox"
-          className="checkbox-input"
-          id={empType.employmentTypeId}
-          value={activeEmploymentId}
-          onChange={this.onChangeEmployTypesIds}
-        />
-        <label
-          htmlFor={empType.employmentTypeId}
-          className="label-name"
-          value="label"
-        >
-          {empType.label}
-        </label>
-      </li>
-    ))
-  }
+  renderEmploymentTypesList = () => (
+    <>
+      {employmentTypesList.map(empType => (
+        <li key={empType.employmentTypeId} className="emp-type-item">
+          <input
+            type="checkbox"
+            className="checkbox-input"
+            id={empType.employmentTypeId}
+            onChange={this.onChangeEmployTypesIds}
+          />
+          <label
+            htmlFor={empType.employmentTypeId}
+            className="label-name"
+            value="label"
+          >
+            {empType.label}
+          </label>
+        </li>
+      ))}
+    </>
+  )
 
   onCLickSalaryRangeList = event => {
     this.setState({activeSalaryId: event.target.id}, this.getJobs)
