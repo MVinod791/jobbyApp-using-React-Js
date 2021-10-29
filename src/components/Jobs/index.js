@@ -115,7 +115,7 @@ class Jobs extends Component {
   renderSearchInputFiled = () => {
     const {searchInput} = this.state
     return (
-      <div className="desktop-search-container ">
+      <div className="desktop-search-container mobile-searchInput">
         <input
           type="search"
           placeholder="Search"
@@ -135,30 +135,13 @@ class Jobs extends Component {
     )
   }
 
-  renderSearchInputMobile = () => {
-    const {searchInput} = this.state
-    return (
-      <div className="mobile-search-container ">
-        <input
-          value={searchInput}
-          type="search"
-          placeholder="Search"
-          className="search-input"
-        />
-        <button type="button" testid="searchButton" className="search-icon-btn">
-          <BsSearch className="search-icon" />
-        </button>
-      </div>
-    )
-  }
-
   renderJobsList = () => {
     const {jobsList} = this.state
     const showJobsList = jobsList.length > 0
 
     return (
       <div className="all-jobs-container">
-        {this.renderSearchInputFiled()}
+        <div className="desktop-search">{this.renderSearchInputFiled()}</div>
         {showJobsList ? (
           <ul className="jobs-list">
             {jobsList.map(eachJob => (
@@ -308,7 +291,9 @@ class Jobs extends Component {
         <div className="jobs-section">
           <div className="all-jobs-section">
             <div>
-              {this.renderSearchInputMobile()}
+              <div className="mobile-search-container">
+                {this.renderSearchInputFiled()}
+              </div>
               <Profile />
               <h1 className="heading">Type of Employment</h1>
               <ul className="emp-types-list">

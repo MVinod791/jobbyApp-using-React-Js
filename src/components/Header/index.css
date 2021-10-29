@@ -15,7 +15,7 @@
 .nav-bar-mobile-logo-container {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 95%;
 }
 
 @media screen and (min-width: 768px) {
@@ -35,7 +35,7 @@
   align-items: center;
 }
 .mobile-icon {
-  width: 54px;
+  width: 60px;
   color: #f8fafc;
 }
 .nav-mobile-btn {
@@ -49,7 +49,9 @@
 .nav-bar-image {
   width: 24px;
 }
-
+.mobile-item {
+  list-style-type: none;
+}
 .nav-bar-large-container {
   display: flex;
   align-items: center;
@@ -97,6 +99,7 @@
   margin: 10px;
   font-weight: 400;
   font-size: 16px;
+  list-style-type: none;
 }
 
 .nav-link {

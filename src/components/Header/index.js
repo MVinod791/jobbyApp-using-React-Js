@@ -27,16 +27,16 @@ const Header = props => {
         </Link>
         <div className="mobile-icon-container">
           <Link to="/">
-            <li>
-              <AiFillHome className="mobile-icon" />
+            <li className="mobile-item">
+              <AiFillHome className="mobile-icon" size="24" />
             </li>
           </Link>
           <Link to="/jobs">
-            <li>
-              <BsFillBriefcaseFill className="mobile-icon" />
+            <li className="mobile-item">
+              <BsFillBriefcaseFill className="mobile-icon" size="24" />
             </li>
           </Link>
-          <FiLogOut onClick={onClickLogout} className="mobile-icon" />
+          <FiLogOut onClick={onClickLogout} className="mobile-icon" size="24" />
         </div>
       </div>
       <div className="nav-bar-large-container">
